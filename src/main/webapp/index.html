@@ -1,0 +1,40 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Message Stat</title>
+<!-- jQuery cdn -->
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+
+<!-- Bootstrap css -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	crossorigin="anonymous">
+	
+<!-- Bootstrat table css -->
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.css">
+<!-- Bootstrat js -->	
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<!-- Bootstrap table js -->
+<script src="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.js"></script>
+<!-- app js -->
+<script src="js/app.js"></script>
+</head>
+<body>
+	<div class="container">
+		<table id="message-count-table">
+			<thead>
+				<tr>
+					<th data-field="name">Name</th>
+					<th data-field="messageCount">Message Count</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+	<button type="button" class="btn btn-outline-primary"
+		onclick="getMessageList()">Click</button>
+</body>
+</html>
