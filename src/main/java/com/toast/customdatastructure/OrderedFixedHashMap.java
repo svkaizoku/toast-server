@@ -1,4 +1,4 @@
-package com.aditya.messagestat.customdatastructure;
+package com.toast.customdatastructure;
 
 import java.util.HashMap;
 

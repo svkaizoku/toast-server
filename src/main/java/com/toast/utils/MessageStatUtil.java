@@ -1,4 +1,4 @@
-package com.aditya.messagestat;
+package com.toast.utils;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -8,7 +8,7 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.aditya.messagestat.customdatastructure.OrderedFixedHashMap;
+import com.toast.customdatastructure.OrderedFixedHashMap;
 
 public class MessageStatUtil {
 
@@ -34,7 +34,7 @@ public class MessageStatUtil {
 
 			}
 		}
-		OrderedFixedHashMap topMessagerMap = getTopMessagers(5, userMessageCount);
+		com.toast.customdatastructure.OrderedFixedHashMap topMessagerMap = getTopMessagers(5, userMessageCount);
 		JSONArray topMessagers = constructResponse(topMessagerMap);
 		return topMessagers;
 		

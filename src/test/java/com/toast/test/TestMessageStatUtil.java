@@ -1,4 +1,4 @@
-package com.aditya.messagestat.test;
+package com.toast.test;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,7 +18,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
-import com.aditya.messagestat.MessageStatUtil;
+
+import com.toast.utils.MessageStatUtil;
 
 public class TestMessageStatUtil {
 
