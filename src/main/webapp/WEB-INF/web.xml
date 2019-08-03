@@ -9,15 +9,30 @@
     <servlet>
     	<display-name>Message Statistics Servlet</display-name>
     	<servlet-name>MessageStatServlet</servlet-name>
-    	<servlet-class>com.aditya.messagestat.MessageStatServlet</servlet-class>
+    	<servlet-class>com.toast.servlet.MessageStatServlet</servlet-class>
+    </servlet>
+    <servlet>
+    	<description>
+    	</description>
+    	<display-name>OAuth</display-name>
+    	<servlet-name>OAuth</servlet-name>
+    	<servlet-class>com.toast.login.OAuth</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>MessageStatServlet</servlet-name>
-        <url-pattern>/MessageStatServlet</url-pattern>
+        <servlet-name>ChannelServlet</servlet-name>
+        <url-pattern>/ChannelServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>MessageStatServlet</servlet-name>
-        <url-pattern>/messageStatServlet</url-pattern>
+        <servlet-name>ChannelServlet</servlet-name>
+        <url-pattern>/channel</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+    	<servlet-name>OAuth</servlet-name>
+    	<url-pattern>/user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+    	<servlet-name>OAuth</servlet-name>
+    	<url-pattern>/oauth</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
