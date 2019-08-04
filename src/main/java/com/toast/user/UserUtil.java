@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -14,7 +15,7 @@ import org.json.JSONObject;
 
 public class UserUtil
 {
-	private static final String USER_INSERT = "INSERT INTO user (first_name, last_tname, username) VALUES (?,?,?)";
+	private static final String USER_INSERT = "INSERT INTO users (first_name, last_tname, username) VALUES (?,?,?)";
 	private static final String AUTH_INSERT = "INSERT INTO auth (id, oauth) VALUES (?,?)";
 	
 	public Integer persistUser(JSONObject object)
@@ -25,20 +26,25 @@ public class UserUtil
 			String firstName = object.getString("first_name");
 			String lastName = object.getString("last_name");
 			String oauthToken = object.getString("oauth_token");
-			try (Connection conn = DriverManager.getConnection(
-					"jdbc:mysql://localhost/toast", "root", "");
-	             PreparedStatement preparedStatement = conn.prepareStatement(USER_INSERT)) {
+			
+			try {
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/toast", "root", "");
+            PreparedStatement preparedStatement = conn.prepareStatement(USER_INSERT, Statement.RETURN_GENERATED_KEYS);
 
-	            preparedStatement.setString(1, firstName);
-	            preparedStatement.setString(2, lastName);
-	            preparedStatement.setString(3, username);
-	            int row = preparedStatement.executeUpdate();
-	            ResultSet rs = preparedStatement.getGeneratedKeys();
-	            Integer userID = rs.getInt(0);
-	            // rows affected
-	            System.out.println(row);
-	            persistOAuthToken(userID, oauthToken);
-	            return userID;
+            preparedStatement.setString(1, firstName);
+            preparedStatement.setString(2, lastName);
+            preparedStatement.setString(3, username);
+            int row = preparedStatement.executeUpdate();
+            ResultSet rs = preparedStatement.getGeneratedKeys();
+            Integer userID = null;
+            if(rs.next())
+            {userID = rs.getInt(1);}
+            // rows affected
+            persistOAuthToken(userID, oauthToken);
+            return userID;
+					
 
 	        } catch (SQLException e) {
 	            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());

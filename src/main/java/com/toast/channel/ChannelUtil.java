@@ -57,6 +57,7 @@ public class ChannelUtil
 	public JSONObject getChannel(Integer channelId)
 	{
 		JSONObject channelObject = new JSONObject();
+		
 		try (Connection conn = DriverManager.getConnection(
 				"jdbc:mysql://localhost/toast", "root", "root");
              PreparedStatement preparedStatement = conn.prepareStatement(CHANNEL_SELECT)) {
