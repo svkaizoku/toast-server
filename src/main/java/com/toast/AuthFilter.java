@@ -16,7 +16,7 @@ public class AuthFilter implements Filter{
 			throws IOException, ServletException{
 		String authToken = arg0.getParameter("oauth_token");
 		PrintWriter out=arg1.getWriter();  
-	    out.print("filter is invoked before");  
+	    //out.print("filter is invoked before");  
 	    //put static map and load credentials
 	    arg2.doFilter(arg0, arg1);//sends request to next resource 	
 	}
