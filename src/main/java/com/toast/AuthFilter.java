@@ -1,6 +1,7 @@
 package com.toast;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -13,8 +14,11 @@ public class AuthFilter implements Filter{
 	@Override
 	public void doFilter(ServletRequest arg0, ServletResponse arg1, FilterChain arg2)
 			throws IOException, ServletException{
-		
-		
+		String authToken = arg0.getParameter("oauth_token");
+		PrintWriter out=arg1.getWriter();  
+	    out.print("filter is invoked before");  
+	    //put static map and load credentials
+	    arg2.doFilter(arg0, arg1);//sends request to next resource 	
 	}
 
 }
