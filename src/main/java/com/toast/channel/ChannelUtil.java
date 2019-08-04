@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
@@ -29,18 +30,21 @@ public class ChannelUtil
 			String name = returnJSON.getString("name");
 			String description = returnJSON.getString("description");
 			
-			try (Connection conn = DriverManager.getConnection(
-					"jdbc:mysql://localhost/toast", "root", "root");
-	             PreparedStatement preparedStatement = conn.prepareStatement(CHANNEL_INSERT)) {
+			try{
+				Class.forName("com.mysql.jdbc.Driver").newInstance();
+				DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+				
+				Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/toast", "root", "");
+	            PreparedStatement preparedStatement = conn.prepareStatement(CHANNEL_INSERT,Statement.RETURN_GENERATED_KEYS);
 
 	            preparedStatement.setString(1, name);
 	            preparedStatement.setString(2, description);
 	            timeStamp = new Timestamp(System.currentTimeMillis());
 	            preparedStatement.setTimestamp(3, timeStamp);
 	            
-	            int row = preparedStatement.executeUpdate();
+	            preparedStatement.executeUpdate();
 	            ResultSet rs = preparedStatement.getGeneratedKeys();
-	            channelID = rs.getInt(0);
+	            channelID = rs.getInt(1);
 	            returnJSON.put("channel_id", channelID);
 	            returnJSON.put("start_time", timeStamp);
 
@@ -57,10 +61,11 @@ public class ChannelUtil
 	public JSONObject getChannel(Integer channelId)
 	{
 		JSONObject channelObject = new JSONObject();
-		
-		try (Connection conn = DriverManager.getConnection(
-				"jdbc:mysql://localhost/toast", "root", "root");
-             PreparedStatement preparedStatement = conn.prepareStatement(CHANNEL_SELECT)) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/toast", "root", "");
+			PreparedStatement preparedStatement = conn.prepareStatement(CHANNEL_SELECT);
 
             preparedStatement.setInt(1, channelId);
             
@@ -99,29 +104,31 @@ public class ChannelUtil
 	
 	public JSONArray getUsersInChannel(Integer channelId)
 	{
-		JSONArray usersArray = new JSONArray();
-		try (Connection conn = DriverManager.getConnection(
-				"jdbc:mysql://localhost/toast", "root", "root");
-             PreparedStatement preparedStatement = conn.prepareStatement(CHANNEL_USER_SELECT)) {
-
-            preparedStatement.setInt(1, channelId);
-            
-            int row = preparedStatement.executeUpdate();
-            ResultSet rs = preparedStatement.getResultSet();
-            while(rs.next())
-            {
-            	JSONObject channelObject =  new JSONObject();
-            	String first_name = rs.getString("first_name");
-            	String last_name = rs.getString("last_name");
-            	Integer id = rs.getInt("id");
-            	channelObject.put("first_name", first_name);
-            	channelObject.put("last_name", last_name);
-            	channelObject.put("id", id);
-            	
-            	usersArray.put(channelObject);
-            }
-
-        } catch (SQLException e) {
+			try{
+				JSONArray usersArray = new JSONArray();
+				Class.forName("com.mysql.jdbc.Driver").newInstance();
+				DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+				Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/toast", "root", "");
+	            PreparedStatement preparedStatement = conn.prepareStatement(CHANNEL_USER_SELECT);
+	
+	            preparedStatement.setInt(1, channelId);
+	            
+	            int row = preparedStatement.executeUpdate();
+	            ResultSet rs = preparedStatement.getResultSet();
+	            while(rs.next())
+	            {
+	            	JSONObject channelObject =  new JSONObject();
+	            	String first_name = rs.getString("first_name");
+	            	String last_name = rs.getString("last_name");
+	            	Integer id = rs.getInt("id");
+	            	channelObject.put("first_name", first_name);
+	            	channelObject.put("last_name", last_name);
+	            	channelObject.put("id", id);
+	            	
+	            	usersArray.put(channelObject);
+	            }
+	
+	        } catch (SQLException e) {
             System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();

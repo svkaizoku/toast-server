@@ -74,9 +74,11 @@ public class UserUtil
 	
 	public void persistOAuthToken(Integer userId, String OAuthToken)
 	{
-		try (Connection conn = DriverManager.getConnection(
-				"jdbc:mysql://localhost/mickeylite/toast", "root", "");
-             PreparedStatement preparedStatement = conn.prepareStatement(AUTH_INSERT)) {
+		try{
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/mickeylite/toast", "root", "");
+            PreparedStatement preparedStatement = conn.prepareStatement(AUTH_INSERT);
 
             preparedStatement.setInt(1, userId);
             preparedStatement.setString(2, OAuthToken);

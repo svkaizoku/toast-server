@@ -1,6 +1,8 @@
 package com.toast.user;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
@@ -42,11 +44,11 @@ public class UserServlet extends HttpServlet {
 			JSONObject input = misc.processInput(request);
 			UserUtil oAuthUtil = new UserUtil();
 			Integer userId = oAuthUtil.persistUser(input);
-			JSONObject returnJSON = null;
+			JSONObject returnJSON = new JSONObject();
 			if(userId != null)
 			{
 				returnJSON.put("user_id", returnJSON);
-				ServletOutputStream out = response.getOutputStream();
+				PrintWriter out = response.getWriter();
 				out.print(returnJSON.toString());
 			}
 			
