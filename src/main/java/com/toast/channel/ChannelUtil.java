@@ -10,11 +10,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class ChannelUtil
 {
-	private static final String CHANNEL_INSERT = "INSERT INTO user (name, description, start_time, is_active) VALUES (?,?,?,?)";
+	private static final String CHANNEL_INSERT = "INSERT INTO channel (name, description, start_time) VALUES (?,?,?)";
+	private static final String CHANNEL_USER_SELECT = "SELECT first_name, last_name, id  FROM users WHERE id IN (SELECT  user_id FROM channel_members WHERE channel_id= ?)";
+	private static final String CHANNEL_SELECT = "SELECT * FROM channel WHERE id = ?";
 	
 	public JSONObject createChannel(JSONObject jsonObject)
 	{
@@ -34,7 +37,6 @@ public class ChannelUtil
 	            preparedStatement.setString(2, description);
 	            timeStamp = new Timestamp(System.currentTimeMillis());
 	            preparedStatement.setTimestamp(3, timeStamp);
-	            preparedStatement.setBoolean(4, true);
 	            
 	            int row = preparedStatement.executeUpdate();
 	            ResultSet rs = preparedStatement.getGeneratedKeys();
@@ -52,6 +54,79 @@ public class ChannelUtil
 		return returnJSON;
 	}
 	
+	public JSONObject getChannel(Integer channelId)
+	{
+		JSONObject channelObject = new JSONObject();
+		try (Connection conn = DriverManager.getConnection(
+				"jdbc:mysql://localhost/toast", "root", "root");
+             PreparedStatement preparedStatement = conn.prepareStatement(CHANNEL_SELECT)) {
+
+            preparedStatement.setInt(1, channelId);
+            
+            int row = preparedStatement.executeUpdate();
+            ResultSet rs = preparedStatement.getResultSet();
+            while(rs.next())
+            {
+            	String name = rs.getString("name");
+            	String description = rs.getString("description");
+            	Timestamp start_time = rs.getTimestamp("start_time");
+            	channelObject.put("channel_id", channelId);
+            	channelObject.put("name", name);
+            	channelObject.put("description", description);
+            	channelObject.put("start_time", String.valueOf(start_time));
+            	long milli_diff = (System.currentTimeMillis() - start_time.getTime());
+            	if(milli_diff > 300000)
+            	{
+            		channelObject.put("is_active", false);
+            	}
+            	else
+            	{
+            		channelObject.put("is_active", true);
+            	}
+            	
+            	return channelObject;
+            		
+            }
+
+        } catch (SQLException e) {
+            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+		return null;
+	}
+	
+	public JSONArray getUsersInChannel(Integer channelId)
+	{
+		JSONArray usersArray = new JSONArray();
+		try (Connection conn = DriverManager.getConnection(
+				"jdbc:mysql://localhost/toast", "root", "root");
+             PreparedStatement preparedStatement = conn.prepareStatement(CHANNEL_USER_SELECT)) {
+
+            preparedStatement.setInt(1, channelId);
+            
+            int row = preparedStatement.executeUpdate();
+            ResultSet rs = preparedStatement.getResultSet();
+            while(rs.next())
+            {
+            	JSONObject channelObject =  new JSONObject();
+            	String first_name = rs.getString("first_name");
+            	String last_name = rs.getString("last_name");
+            	Integer id = rs.getInt("id");
+            	channelObject.put("first_name", first_name);
+            	channelObject.put("last_name", last_name);
+            	channelObject.put("id", id);
+            	
+            	usersArray.put(channelObject);
+            }
+
+        } catch (SQLException e) {
+            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+		return null;
+	}
 	private boolean isValidChannel(JSONObject object)
 	{
 		String[] a = {"name", "description"};

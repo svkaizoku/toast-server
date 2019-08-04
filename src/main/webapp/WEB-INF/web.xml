@@ -28,6 +28,26 @@
     	<servlet-name>User</servlet-name>
     	<url-pattern>/oauth</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Channel</servlet-name>
+        <url-pattern>/channel/*</url-pattern>
+    </servlet-mapping>
+    
+    
+    
+ 	<filter>
+ 		<filter-name>AuthFilter</filter-name> 
+  		<filter-class>com.toast.AuthFilter</filter-class> 
+  	</filter>
+  	
+  	
+	<filter-mapping>
+  		<filter-name>AuthFilter</filter-name> 
+  		<url-pattern>/*</url-pattern> 
+  		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+  	
+
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
         </welcome-file-list>
