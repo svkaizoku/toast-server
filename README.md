@@ -10,8 +10,8 @@ The Instrument class models an Asset. The Instruments are uniquely identified by
 ### Quote
 The Quote class models a change in the price of an Instrument. The quote is identified by isin and time.
 
-### Actions
-The CandlestickAction is the entry point for the "/candlesticks" API. It retrieves the candlesticks info for the last 30 minutes. 
+### CandlestickAction
+The CandlestickAction is the entry point for the "/candlesticks" API. It retrieves the candlesticks info for the duration required for Customer. In this case we fetch the last 30 minutes data, with 1 minute chunks of candlesticks.
 
 ### Solution Approach 
 
