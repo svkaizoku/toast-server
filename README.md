@@ -75,11 +75,22 @@ Run the below command to import the tables to the system.
 
 Requires Maven and Java 8 to be installed on a Unix box.
 
-### Using Maven and source code 
+### Using Maven and source code - during development
 
-Go to the source folder and execute: mvn tomcat7:run
+	mvn tomcat7:run
 
-This automatically starts an embedded server on port 9966
+
+
+### Deplaying the war file by starting a tomcat server
+
+ 1. Unzip the apache-tomcat-8.5.71 provided. 
+ 2. Go to the webapps folder once unzipped and paste the war file.
+ 3. Go to bin folder and then run the below commands to start a server <br />
+	
+ `    sh startup.sh      `
+
+This automatically starts an embedded server on port 8080 with context `CandlestickManager`. 
+
 
 
 ### API and Sample Output
@@ -88,7 +99,7 @@ Running on localhost
 
 1. Find the last 30 minutes Quotes for Instrument 'JX00162I3551'.
 
-`http://localhost:9966/candlesticks?isin=JX00162I3551
+` http://localhost:8080/CandlestickManager/candlesticks?isin=JX00162I3551
 
 ```javascript
 {"JX00162I3551":
@@ -122,5 +133,5 @@ Running on localhost
 
 We can also add additional params to the API 
 
-'duration': The last time duration for record needed. By default, it is set to 30 <br />
-'chunk': The size of the candlesticks <br />
+`duration`: The last time duration for record needed. By default, it is set to 30 <br />
+`chunk`: The size of the candlesticks <br />
